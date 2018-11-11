@@ -8,7 +8,7 @@ const {
     Text
 } = Svg;
 
-const arrowStrokeWidth = 0.1;
+const arrowStrokeWidth = 0.2;
 
 export default class PendingMoveArrow extends Component {
   render() {
@@ -37,7 +37,7 @@ export default class PendingMoveArrow extends Component {
         // The progress width in the stem is a little more than the arrowhead width
         // to include the stroke width of the base of the arrowhead.
         // Draw the rhombus representing the progress of the arrowhead.
-        const hackMultiplier = 0.95;
+        const hackMultiplier = 0.90;// for arrowStrokeWidth = 0.1 use 0.95;
         const maxArrowheadWidth = progressFull * 2 - full;
         const arrowHeadProgressWidth = Math.min(maxArrowheadWidth, width - full);
         const arrowheadProgressHeightChange = arrowHeadProgressWidth;//Math.sqrt(Math.pow(progressHalf,2) + Math.pow(arrowHeadProgressWidth,2));
@@ -64,7 +64,7 @@ export default class PendingMoveArrow extends Component {
         <Path
           d={outlinePathData}
           fill="white"
-          stroke="black"
+          stroke={this.props.color}
           strokeWidth={arrowStrokeWidth}
         />
         <Path

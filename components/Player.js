@@ -19,6 +19,7 @@ export default class Player extends React.Component {
     // moment.utc(moment(this.props.currentGameTime).diff(this.props.gameStartTime)).format("mm:ss") || "";
     let gameTimeSeconds = 0;
     let percentToMove;
+    let pendingMoveTime = "";
     const piePieces =
     this.props.gameDurationSeconds &&
     this.props.gameStartTime &&
@@ -39,6 +40,8 @@ export default class Player extends React.Component {
       assignment.position !== positions.substitute) {
         gameTimeSeconds += endSecondsSinceGameStart - startSecondsSinceGameStart;
       }
+      const pendingMoveSeconds = this.props.gamePlan.secondsBetweenSubs - (endSecondsSinceGameStart - startSecondsSinceGameStart);
+      pendingMoveTime = moment.utc(pendingMoveSeconds*1000).format("m:ss") || "0:00";
       percentToMove = (endSecondsSinceGameStart - startSecondsSinceGameStart) / this.props.gamePlan.secondsBetweenSubs * 100;
       return {
         color: assignment.position.positionCategory.color,
@@ -56,7 +59,7 @@ export default class Player extends React.Component {
     _.find(this.props.gamePlan.assignmentsList, (assignments) => !assignments.startTime);
     const nextAssignment = nextAssignments &&
     _.find(nextAssignments.assignments, (_assignment) => _assignment.player === this.props.player);
-    const playTime = moment.utc(gameTimeSeconds*1000).format("mm:ss") || "0:00";
+    const playTime = moment.utc(gameTimeSeconds*1000).format("m:ss") || "0:00";
     const playerNameStyle = {
       ...styles.playerName,
       backgroundColor: this.props.player.preferredPositionCategories[0].color,
@@ -78,11 +81,18 @@ export default class Player extends React.Component {
             positionColor={this.props.position.positionCategory.color}
           />
           {nextAssignment && nextAssignment.position !== this.props.position &&
-            <PendingMoveArrow
-              style={styles.arrow}
-              percent={percentToMove}
-              color={nextAssignment.position.positionCategory.color}
-            />
+            <View
+              style={styles.arrowAndCountdown}
+            >
+              <PendingMoveArrow
+                style={styles.arrow}
+                percent={percentToMove}
+                color={nextAssignment.position.positionCategory.color}
+              />
+              <Text style={styles.pendingMoveTime}>
+                {pendingMoveTime}
+              </Text>
+            </View>
           }
         </View>
         <Text style={playerNameStyle}>
@@ -103,10 +113,17 @@ const styles = {
     padding: 3,
   },
   playTime: {
-    fontSize: 15,
+    fontSize: 14,
     color: 'black',
     lineHeight: 16,
     textAlign: 'center',
+  },
+  pendingMoveTime: {
+    fontSize: 13,
+    color: 'black',
+    lineHeight: 16,
+    textAlign: 'center',
+    width: 30,
   },
   arrow: {
     height: 20,
@@ -114,8 +131,13 @@ const styles = {
     margin: 3,
   },
   pieAndArrow: {
-    flex: 1,
+    height: 60,
     flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  arrowAndCountdown: {
+    flexDirection: "column",
     alignItems: 'center',
     justifyContent: 'center',
   },

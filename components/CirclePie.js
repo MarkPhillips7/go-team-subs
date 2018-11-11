@@ -58,7 +58,7 @@ export default class CirclePie extends Component {
                 d={pathData}
                 fill={piePiece.color}
                 stroke={piePiece.color}
-                strokeWidth={circleBorderWidth / 3}
+                strokeWidth={circleBorderWidth / 4}
               />
             );
           })
