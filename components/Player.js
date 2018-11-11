@@ -1,5 +1,6 @@
 import React from 'react'
 import CirclePie from '../components/CirclePie'
+import PendingMoveArrow from '../components/PendingMoveArrow'
 // import {ART} from 'react-native'
 import {
   Text,
@@ -17,6 +18,7 @@ export default class Player extends React.Component {
     // this.props.gameStartTime &&
     // moment.utc(moment(this.props.currentGameTime).diff(this.props.gameStartTime)).format("mm:ss") || "";
     let gameTimeSeconds = 0;
+    let percentToMove;
     const piePieces =
     this.props.gameDurationSeconds &&
     this.props.gameStartTime &&
@@ -37,6 +39,7 @@ export default class Player extends React.Component {
       assignment.position !== positions.substitute) {
         gameTimeSeconds += endSecondsSinceGameStart - startSecondsSinceGameStart;
       }
+      percentToMove = (endSecondsSinceGameStart - startSecondsSinceGameStart) / this.props.gamePlan.secondsBetweenSubs * 100;
       return {
         color: assignment.position.positionCategory.color,
         startValue,
@@ -45,6 +48,14 @@ export default class Player extends React.Component {
     })
     .value()
     || [];
+    const nextAssignments =
+    this.props.gameDurationSeconds &&
+    this.props.gameStartTime &&
+    this.props.gamePlan &&
+    this.props.gamePlan.assignmentsList &&
+    _.find(this.props.gamePlan.assignmentsList, (assignments) => !assignments.startTime);
+    const nextAssignment = nextAssignments &&
+    _.find(nextAssignments.assignments, (_assignment) => _assignment.player === this.props.player);
     const playTime = moment.utc(gameTimeSeconds*1000).format("mm:ss") || "0:00";
     const playerNameStyle = {
       ...styles.playerName,
@@ -57,12 +68,23 @@ export default class Player extends React.Component {
         <Text style={styles.playTime}>
           {playTime}
         </Text>
-        <CirclePie
-          player={this.props.player}
-          radius={30}
-          piePieces={piePieces}
-          positionColor={this.props.position.positionCategory.color}
-        />
+        <View
+          style={styles.pieAndArrow}
+        >
+          <CirclePie
+            player={this.props.player}
+            radius={30}
+            piePieces={piePieces}
+            positionColor={this.props.position.positionCategory.color}
+          />
+          {nextAssignment && nextAssignment.position !== this.props.position &&
+            <PendingMoveArrow
+              style={styles.arrow}
+              percent={percentToMove}
+              color={nextAssignment.position.positionCategory.color}
+            />
+          }
+        </View>
         <Text style={playerNameStyle}>
           {this.props.player && this.props.player.name}
         </Text>
@@ -85,5 +107,16 @@ const styles = {
     color: 'black',
     lineHeight: 16,
     textAlign: 'center',
+  },
+  arrow: {
+    height: 20,
+    width: 20,
+    margin: 3,
+  },
+  pieAndArrow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 };

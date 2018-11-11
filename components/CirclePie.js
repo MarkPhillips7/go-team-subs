@@ -10,38 +10,8 @@ const {
 } = Svg;
 
 const circleBorderWidth = 0.08;
-//{`${this.props.piePieces[0].startValue*2*Math.PI*this.props.radius/2}, ${0.5*2*Math.PI*this.props.radius/2}`}
-// this.props.piePieces && this.props.piePieces.map((piePiece, index) => (
-//   <Circle
-//     key={index}
-//     origin={`{this.props.radius}, {this.props.radius}`}
-//     cx={this.props.radius}
-//     cy={this.props.radius}
-//     r={this.props.radius / 2}
-//     stroke={piePiece.color}
-//     strokeWidth={this.props.radius}
-//     fill="none"
-//     strokeDasharray={`${piePiece.endValue*2*Math.PI*this.props.radius}, ${2*Math.PI*this.props.radius}`}
-//     strokeDashoffset={`${piePiece.startValue*2*Math.PI*this.props.radius}`}
-//   />
-// ))
-// style={{transform: "rotate(-0.25turn)"}}
 
-// <Svg
-//   key={index}
-//   viewBox="-1 -1 2 2"
-// >
-//   <Path
-//     d={pathData}
-//     fill={piePiece.color}
-//   />
-// </Svg>
-
-  // style={{transform: [
-  //   {rotate: "-90deg"}
-  // ]}}
 export default class CirclePie extends Component {
-  static title = 'Draw a Pie shape with circle';
   render() {
     const getCoordinatesPieSlice = (percent) => {
       const quarterTurnOffset = -1/4*2 * Math.PI;
