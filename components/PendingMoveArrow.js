@@ -56,6 +56,12 @@ export default class PendingMoveArrow extends Component {
     progressPathData = progressPathData.join(' ');
 
     // transform={[{rotateZ: '45deg'}]}
+    // <Path
+    //   d={progressPathData}
+    //   fill={this.props.color}
+    //   stroke="transparent"
+    //   strokeWidth={0.0}
+    // />
     return (
       <Svg
         style={this.props.style}
@@ -70,8 +76,8 @@ export default class PendingMoveArrow extends Component {
         <Path
           d={progressPathData}
           fill={this.props.color}
-          stroke="transparent"
-          strokeWidth={0}
+          stroke={this.props.color}
+          strokeWidth={0.01}
         />
       </Svg>
     );
